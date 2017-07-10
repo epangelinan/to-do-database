@@ -33,6 +33,11 @@ public class Task {
    return id;
  }
 
+ public int getCategoryId() {
+  return categoryId;
+}
+
+
  public static Task find(int id) {
    try(Connection con = DB.sql2o.open()) {
      String sql = "SELECT * FROM tasks where id=:id";
@@ -58,23 +63,20 @@ public class Task {
      Task newTask = (Task) otherTask;
      return this.getDescription().equals(newTask.getDescription()) &&
             this.getId() == newTask.getId() &&
-            this.getCategoryId() == newTask.getCategoryId();
+            this.getCategoryId() == newTask.getCategoryId() &&
+            this.isCompleted() == newTask.isCompleted();
    }
  }
 
  public void save() {
    try(Connection con = DB.sql2o.open()) {
-     String sql = "INSERT INTO tasks(description, categoryId) VALUES (:description, :categoryId);";
+     String sql = "INSERT INTO tasks(description, categoryId, completed) VALUES (:description, :categoryId, :completed);";
      this.id = (int) con.createQuery(sql, true)
        .addParameter("description", this.description)
        .addParameter("categoryId", this.categoryId)
+       .addParameter("completed", this.completed)
        .executeUpdate()
        .getKey();
    }
  }
-
-   public int getCategoryId() {
-    return categoryId;
-  }
-
 }

@@ -109,4 +109,5 @@ public class TaskTest {
     Task savedTask = Task.find(myTask.getId());
     assertEquals(savedTask.getCategoryId(), myCategory.getId());
   }
+
 }
